@@ -44,7 +44,18 @@ class Pictures extends Component {
         </form>
         <h1>Pictures to go here! lala</h1>
         {this.props.pictures.length ? (
-          <img src={this.props.pictures[Math.floor(Math.random() * 5)].url} />
+          <div>
+            <h4>{this.props.words}</h4>
+            {/* <img
+              //   // src={
+              //   //   this.props.pictures[Math.floor(Math.random() * 25)].images
+              //   //     .fixed_height.gif_url
+              //   // }
+              // src={this.props.pictures[Math.floor(Math.random() * 5)].url}
+
+            /> */}
+            <iframe src="https://giphy.com/embed/qygzgFH2BXmhi" />
+          </div>
         ) : null}
       </div>
     )

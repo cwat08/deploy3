@@ -25,7 +25,7 @@ class Word extends Component {
   }
   async handleChange(evt) {
     try {
-      console.log('WORDS ON STATE', this.state.word)
+      console.log('HANDLING CHANGE ***', this.props.transcript)
       this.setState({word: evt.target.value})
       if (this.state.word.length) {
         await this.props.addWordThunk(this.state.word)
@@ -74,11 +74,16 @@ class Word extends Component {
     if (this.props.pictures && this.props.pictures.length) {
       return (
         <div>
-          <img
+          {/* <img
             className="centered"
             src={this.props.pictures[Math.floor(Math.random() * 5)].url}
+            // src='https://giphy.com/embed/qygzgFH2BXmhi'
+          /> */}
+          <iframe
+            className="centered"
+            src={this.props.pictures[Math.floor(Math.random() * 25)].embed_url}
           />
-          <h3>{this.props.words.join(' ')}</h3>
+          <h4>{this.props.words.join(' ')}</h4>
         </div>
       )
     } else {
