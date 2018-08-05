@@ -1,5 +1,11 @@
+* {
+  background-color: aquamarine;
+}
+
 body {
-  font-family: sans-serif;
+  font-family: alcubierre, sans-serif;
+  font-size: 40px;
+  letter-spacing: 8px;
 }
 
 a {
@@ -31,11 +37,18 @@ input {
 }
 
 .centered {
-  position: fixed;
+  /* position: fixed;
   top: 50%;
   left: 50%;
   margin-top: -50px;
-  margin-left: -100px;
+  margin-left: -100px; */
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  height: 50%;
 }
 
 .center-horizontal {
@@ -44,6 +57,30 @@ input {
   margin-left: -100px;
 }
 
-.center-text {
+/* .center-text {
   text-align: center;
+  position: absolute;
+  left: 50%;
+  /* top: 50%; */
+/* transform: translate(-50%, -50%); */
+/* width: 40%; */
+/* height: 50%; */
+/* }  */
+
+.center-text {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
+
+@font-face {
+  src: url(Alcubierre.otf);
+  font-family: alcubierre;
+}
+
+img {
+  height: 400px;
+  width: 400px;
+  object-fit: contain;
 }

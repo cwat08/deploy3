@@ -23,10 +23,25 @@ class Word extends Component {
     console.log('PROP TRANSCRIPT', this.props.transcript)
     this.setState({prompt: this.props.prompts[Math.floor(Math.random() * 3)]})
   }
-  handleChange(evt) {
-    console.log('WORDS', this.props.transcript)
-    this.setState({word: evt.target.value})
-    console.log('WORD**', this.state.prompt)
+  async handleChange(evt) {
+    try {
+      console.log('WORDS ON STATE', this.state.word)
+      this.setState({word: evt.target.value})
+      if (this.state.word.length) {
+        await this.props.addWordThunk(this.state.word)
+        if (this.props.words.length === 3) {
+          await this.props.searchPicturesThunk(this.props.words.join(' '))
+        } else {
+          this.props.reset()
+          this.setState({
+            word: '',
+            prompt: this.props.prompts[Math.floor(Math.random() * 3)]
+          })
+        }
+      }
+    } catch (err) {
+      console.error(err.message)
+    }
   }
 
   async handleSubmit(evt) {
@@ -34,11 +49,13 @@ class Word extends Component {
       evt.preventDefault()
       //await this.setState({word: evt.target.value})
       //if word length < 3 add word to state otherwise search pictures
-      await this.props.addWordThunk(this.state.word)
+      await this.props.addWordThunk(this.props.transcript)
 
       if (this.props.words.length === 3) {
         await this.props.searchPicturesThunk(this.props.words.join(' '))
       } else {
+        this.props.reset()
+        console.log('RESET TRANSCRIPT', this.props.transcript)
         this.setState({
           word: '',
           prompt: this.props.prompts[Math.floor(Math.random() * 3)]
@@ -57,7 +74,11 @@ class Word extends Component {
     if (this.props.pictures && this.props.pictures.length) {
       return (
         <div>
-          <img src={this.props.pictures[Math.floor(Math.random() * 5)].url} />
+          <img
+            className="centered"
+            src={this.props.pictures[Math.floor(Math.random() * 5)].url}
+          />
+          <h3>{this.props.words.join(' ')}</h3>
         </div>
       )
     } else {
@@ -66,17 +87,19 @@ class Word extends Component {
           <form className="centered" onSubmit={this.handleSubmit}>
             <label>
               <input
-                onChange={this.handleChange}
+                onChange={this.handleSubmit}
                 type="text"
                 name="word"
-                value={this.state.word}
+                value={this.props.transcript}
                 autoFocus="true"
               />
             </label>
-
+            {/* <h3 className="centered-text"> __________________________ </h3> */}
             <h3 className="centered-text">{this.state.prompt}</h3>
 
-            <button type="submit">Submit</button>
+            <button className="centered-text" type="submit">
+              Submit
+            </button>
           </form>
         </div>
       )
