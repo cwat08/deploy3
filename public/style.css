@@ -19,3 +19,31 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
+
+input {
+  border: black;
+  text-align: center;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+
+.center-horizontal {
+  position: fixed;
+  left: 50%;
+  margin-left: -100px;
+}
+
+.center-text {
+  text-align: center;
+}
