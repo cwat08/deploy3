@@ -5,18 +5,22 @@ import Routes from './routes'
 import Pictures from './components/pictures'
 import Word from './components/word'
 import SpeechRecognition from './speech_recognition'
+import Home from './components/home'
 
 const App = props => {
   console.log('APP PROPS', props)
   return (
     <div>
-      {/* <Navbar />
-      <Routes /> */}
-      <Word
+      <Routes
         transcript={props.transcript}
         reset={props.resetTranscript}
         stop={props.stopListening}
       />
+      {/* <Home
+        transcript={props.transcript}
+        reset={props.resetTranscript}
+        stop={props.stopListening}
+      /> */}
     </div>
   )
 }

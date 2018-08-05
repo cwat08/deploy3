@@ -26,7 +26,7 @@ class Word extends Component {
   async handleChange(evt) {
     try {
       console.log('HANDLING CHANGE ***', this.props.transcript)
-      this.setState({word: evt.target.value})
+      //this.setState({word: evt.target.value})
       if (this.state.word.length) {
         await this.props.addWordThunk(this.state.word)
         if (this.props.words.length === 3) {
@@ -84,6 +84,9 @@ class Word extends Component {
             src={this.props.pictures[Math.floor(Math.random() * 25)].embed_url}
           />
           <h4>{this.props.words.join(' ')}</h4>
+          <button type="submit" onClick={this.handleClick}>
+            Play again
+          </button>
         </div>
       )
     } else {
@@ -92,7 +95,7 @@ class Word extends Component {
           <form className="centered" onSubmit={this.handleSubmit}>
             <label>
               <input
-                onChange={this.handleSubmit}
+                onChange={this.handleChange}
                 type="text"
                 name="word"
                 value={this.props.transcript}
@@ -127,3 +130,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Word)
+
+//set timer once page loads?/ or speaking starts??
+//validate function --> if this.props.transcript.length && if the word is prompt then
