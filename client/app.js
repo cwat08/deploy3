@@ -8,7 +8,6 @@ import SpeechRecognition from './speech_recognition'
 import Home from './components/home'
 
 const App = props => {
-  console.log('APP PROPS', props)
   return (
     <div>
       <Word
@@ -16,6 +15,7 @@ const App = props => {
         reset={props.resetTranscript}
         stop={props.stopListening}
         listening={props.listening}
+        start={props.startListening}
       />
       {/* <Home
         transcript={props.transcript}

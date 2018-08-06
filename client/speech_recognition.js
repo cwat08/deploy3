@@ -40,7 +40,7 @@ export default function SpeechRecognition(options) {
       }
 
       componentWillMount() {
-        console.log('HERE_')
+        // console.log('HERE_')
         if (recognition) {
           recognition.continuous = true
           recognition.interimResults = true
@@ -114,7 +114,7 @@ export default function SpeechRecognition(options) {
       startListening = () => {
         if (recognition && !listening) {
           try {
-            console.log('LISTENING')
+            // console.log('LISTENING')
             recognition.start()
           } catch (DOMException) {
             // Tried to start recognition after it has already started - safe to swallow this error

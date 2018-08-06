@@ -20,55 +20,32 @@ class Word extends Component {
     this.state = {
       prompt: '',
       hasClicked: false,
-      color: ''
+      color: '',
+      count: 0
     }
-    this.handleChange = this.handleChange.bind(this)
+
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
   async componentDidMount(evt) {
-    console.log('MOUNTING')
     await this.setState({
       prompt: this.props.prompts[Math.floor(Math.random() * 3)],
       color: this.props.colors[Math.floor(Math.random() * 5)]
     })
-    await this.props.getStickerThunk()
-    console.log('STICKER', this.props.sticker)
 
     document.body.style.backgroundColor = this.state.color
-    console.log('COLOR', this.state.color)
   }
 
   handleClick(evt) {
-    console.log(this.state.hasClicked)
     if (evt.target.name === 'play') {
       this.setState({hasClicked: true})
     } else if (evt.target.name === 'again') {
       this.props.clearWordsThunk()
       this.props.clearPicturesThunk()
       this.props.reset()
+      this.setState({count: 0})
+      this.props.start()
     }
-  }
-
-  async handleChange(evt) {
-    // try {
-    //   console.log('HANDLING CHANGE ***', this.props.transcript)
-    //   //this.setState({word: evt.target.value})
-    //   if (this.state.word.length) {
-    //     await this.props.addWordThunk(this.state.word)
-    //     if (this.props.words.length === 3) {
-    //       await this.props.searchPicturesThunk(this.props.words.join(' '))
-    //     } else {
-    //       this.props.reset()
-    //       this.setState({
-    //         word: '',
-    //         prompt: this.props.prompts[Math.floor(Math.random() * 3)]
-    //       })
-    //     }
-    //   }
-    // } catch (err) {
-    //   console.error(err.message)
-    // }
   }
 
   async handleSubmit(evt) {
@@ -80,13 +57,18 @@ class Word extends Component {
       //evt.preventDefault()
       //await this.setState({word: evt.target.value})
       //if word length < 3 add word to state otherwise search pictures
-      await this.props.addWordThunk(this.props.transcript)
-
-      if (this.props.words.length === 3) {
+      if (this.state.count < 3) {
+        await this.props.addWordThunk(this.props.transcript)
+        this.setState({count: (this.state.count += 1)})
+        console.log('COUNT', this.state.count)
+      }
+      if (this.state.count === 3) {
         await this.props.searchPicturesThunk(this.props.words.join(' '))
+        await this.props.reset()
+        await this.props.stop()
       } else {
         this.props.reset()
-        console.log('RESET TRANSCRIPT', this.props.transcript)
+
         await this.setState({
           prompt: this.props.prompts[Math.floor(Math.random() * 18)],
           color: this.props.colors[Math.floor(Math.random() * 5)]
@@ -101,7 +83,6 @@ class Word extends Component {
   render() {
     if (!this.props.pictures.length && this.props.listening) {
       setTimeout(() => {
-        console.log('TIMING OUT**')
         if (this.props.transcript.length) this.handleSubmit()
       }, 5000)
     }
@@ -152,6 +133,7 @@ class Word extends Component {
     } else {
       return (
         <div className="center-div">
+          {console.log('RENDERING_________________')}
           <form className="centered" onSubmit={this.handleSubmit}>
             <label>
               <input
@@ -161,7 +143,7 @@ class Word extends Component {
                 name="word"
                 value={this.props.transcript}
                 autoFocus="true"
-                backgroundColor={this.state.color}
+                // backgroundColor={this.state.color}
               />
             </label>
             <h3 className="centered-text">{this.state.prompt}</h3>
