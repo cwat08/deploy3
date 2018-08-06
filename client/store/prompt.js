@@ -9,7 +9,26 @@ import axios from 'axios'
 /**
  * INITIAL STATE
  */
-export const defaultPrompts = ['noun', 'verb', 'adjective']
+export const defaultPrompts = [
+  'noun',
+  'verb',
+  'adjective',
+  'city',
+  'animal',
+  'actor',
+  'country',
+  'artist',
+  'musician',
+  'color',
+  'texture',
+  'person',
+  'vehicle',
+  'land form',
+  'monument',
+  'movie',
+  'garment',
+  'body part'
+]
 
 /**
  * ACTION CREATORS

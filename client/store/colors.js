@@ -3,9 +3,9 @@ import axios from 'axios'
 export const defaultColors = [
   '#ffd9b3',
   '#ffb3b3	',
-  '#ffffb3',
   '#b3ffd9',
-  '#ffb3b3'
+  '#b3e1fd',
+  '#cfcbfd'
 ]
 
 /**

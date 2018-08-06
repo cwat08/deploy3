@@ -25,14 +25,15 @@ router.get('/:word', async (req, res, next) => {
     //   picsArr.push(images)
 
     const gifs = await secondClient
-      .search('gifs', {q: req.params.word})
+      .search('gifs', {rating: 'pg-13', q: req.params.word})
       .then(response => {
         response.data.forEach(gifObject => {
           console.log(gifObject.url)
           picsArr.push(gifObject)
         })
       })
-    res.send(picsArr)
+
+    res.send([picsArr[7]])
   } catch (err) {
     next(err)
   }

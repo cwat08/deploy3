@@ -88,7 +88,7 @@ class Word extends Component {
         this.props.reset()
         console.log('RESET TRANSCRIPT', this.props.transcript)
         await this.setState({
-          prompt: this.props.prompts[Math.floor(Math.random() * 3)],
+          prompt: this.props.prompts[Math.floor(Math.random() * 18)],
           color: this.props.colors[Math.floor(Math.random() * 5)]
         })
         document.body.style.backgroundColor = this.state.color
@@ -119,30 +119,34 @@ class Word extends Component {
           </button>
           <iframe
             src="https://giphy.com/embed/2bW31ktSBIYYBf2Lbu"
-            width="480"
-            height="480"
+            width="300"
+            height="300"
             frameBorder="0"
-            className="sticker"
+            className="giphy"
+            allowFullScreen
+          />
+          <iframe
+            className="giphy_constant"
+            src="https://giphy.com/embed/9xk5cHfWqF2XaR10O6"
+            width="250"
+            height="250"
+            frameBorder="0"
             allowFullScreen
           />
         </div>
       )
     } else if (this.props.pictures && this.props.pictures.length) {
       return (
-        <div className="centered-div">
-          {/* <img
-              className="centered"
-              src={this.props.pictures[Math.floor(Math.random() * 5)].url}
-              // src='https://giphy.com/embed/qygzgFH2BXmhi'
-            /> */}
-          <iframe
-            className="centered"
-            src={this.props.pictures[Math.floor(Math.random() * 25)].embed_url}
-          />
-          <p className="centered-text">{this.props.words.join(' ')}</p>
-          <button type="submit" onClick={this.handleClick} name="again">
-            Play again
-          </button>
+        <div className="center-div">
+          <div>
+            <iframe src={this.props.pictures[0].embed_url} />
+          </div>
+          <div>
+            <p>{this.props.words.join(' ')}</p>
+            <button type="submit" onClick={this.handleClick} name="again">
+              PLAY AGAIN
+            </button>
+          </div>
         </div>
       )
     } else {
@@ -160,7 +164,6 @@ class Word extends Component {
                 backgroundColor={this.state.color}
               />
             </label>
-            {/* <h3 className="centered-text"> __________________________ </h3> */}
             <h3 className="centered-text">{this.state.prompt}</h3>
             <iframe
               src={
@@ -170,14 +173,12 @@ class Word extends Component {
                     ? 'https://giphy.com/embed/l378hhjDB5kjSs0qk'
                     : 'https://giphy.com/embed/l378w6DoOV26903Sg'
               }
-              width="480"
-              height="480"
+              width="300"
+              height="300"
               frameBorder="0"
-              class="giphy-embed"
+              className="giphy"
               allowFullScreen
             />
-            ) }}
-            {/* <button type="submit">Submit</button> */}
           </form>
         </div>
       )
