@@ -1,7 +1,12 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {addWordThunk} from '../store/words'
-import {fetchPictures, searchPicturesThunk} from '../store/pictures'
+import {addWordThunk, clearWordsThunk} from '../store/words'
+import {
+  fetchPictures,
+  searchPicturesThunk,
+  clearPicturesThunk
+} from '../store/pictures'
+import {getStickerThunk} from '../store/stickers'
 //if state.word.length < 3 --> ask for an input, otherwise render pictures and fetch pics
 
 // const wordTypeArr = ['noun', 'adjective', 'verb']
@@ -13,40 +18,66 @@ class Word extends Component {
   constructor() {
     super()
     this.state = {
-      word: '',
-      prompt: ''
+      prompt: '',
+      hasClicked: false,
+      color: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
-  componentDidMount(evt) {
-    console.log('PROP TRANSCRIPT', this.props.transcript)
-    this.setState({prompt: this.props.prompts[Math.floor(Math.random() * 3)]})
+  async componentDidMount(evt) {
+    console.log('MOUNTING')
+    await this.setState({
+      prompt: this.props.prompts[Math.floor(Math.random() * 3)],
+      color: this.props.colors[Math.floor(Math.random() * 5)]
+    })
+    await this.props.getStickerThunk()
+    console.log('STICKER', this.props.sticker)
+
+    document.body.style.backgroundColor = this.state.color
+    console.log('COLOR', this.state.color)
   }
-  async handleChange(evt) {
-    try {
-      console.log('HANDLING CHANGE ***', this.props.transcript)
-      //this.setState({word: evt.target.value})
-      if (this.state.word.length) {
-        await this.props.addWordThunk(this.state.word)
-        if (this.props.words.length === 3) {
-          await this.props.searchPicturesThunk(this.props.words.join(' '))
-        } else {
-          this.props.reset()
-          this.setState({
-            word: '',
-            prompt: this.props.prompts[Math.floor(Math.random() * 3)]
-          })
-        }
-      }
-    } catch (err) {
-      console.error(err.message)
+
+  handleClick(evt) {
+    console.log(this.state.hasClicked)
+    if (evt.target.name === 'play') {
+      this.setState({hasClicked: true})
+    } else if (evt.target.name === 'again') {
+      this.props.clearWordsThunk()
+      this.props.clearPicturesThunk()
+      this.props.reset()
     }
+  }
+
+  async handleChange(evt) {
+    // try {
+    //   console.log('HANDLING CHANGE ***', this.props.transcript)
+    //   //this.setState({word: evt.target.value})
+    //   if (this.state.word.length) {
+    //     await this.props.addWordThunk(this.state.word)
+    //     if (this.props.words.length === 3) {
+    //       await this.props.searchPicturesThunk(this.props.words.join(' '))
+    //     } else {
+    //       this.props.reset()
+    //       this.setState({
+    //         word: '',
+    //         prompt: this.props.prompts[Math.floor(Math.random() * 3)]
+    //       })
+    //     }
+    //   }
+    // } catch (err) {
+    //   console.error(err.message)
+    // }
   }
 
   async handleSubmit(evt) {
     try {
-      evt.preventDefault()
+      if (evt) {
+        evt.preventDefault()
+      }
+      clearTimeout()
+      //evt.preventDefault()
       //await this.setState({word: evt.target.value})
       //if word length < 3 add word to state otherwise search pictures
       await this.props.addWordThunk(this.props.transcript)
@@ -56,10 +87,11 @@ class Word extends Component {
       } else {
         this.props.reset()
         console.log('RESET TRANSCRIPT', this.props.transcript)
-        this.setState({
-          word: '',
-          prompt: this.props.prompts[Math.floor(Math.random() * 3)]
+        await this.setState({
+          prompt: this.props.prompts[Math.floor(Math.random() * 3)],
+          color: this.props.colors[Math.floor(Math.random() * 5)]
         })
+        document.body.style.backgroundColor = this.state.color
       }
     } catch (err) {
       console.error(err.message)
@@ -67,47 +99,85 @@ class Word extends Component {
   }
 
   render() {
+    if (!this.props.pictures.length && this.props.listening) {
+      setTimeout(() => {
+        console.log('TIMING OUT**')
+        if (this.props.transcript.length) this.handleSubmit()
+      }, 5000)
+    }
+
     console.log('IN RENDER', this.props.transcript)
     // const prompt = this.state.prompts[
     //   Math.floor(Math.random() * this.state.prompts.length)
     // ]
-    if (this.props.pictures && this.props.pictures.length) {
+    if (!this.state.hasClicked) {
       return (
-        <div>
+        <div className="center-div">
+          <h1>MAD GIPHS</h1>
+          <button onClick={this.handleClick} type="submit" name="play">
+            PLAY
+          </button>
+          <iframe
+            src="https://giphy.com/embed/2bW31ktSBIYYBf2Lbu"
+            width="480"
+            height="480"
+            frameBorder="0"
+            className="sticker"
+            allowFullScreen
+          />
+        </div>
+      )
+    } else if (this.props.pictures && this.props.pictures.length) {
+      return (
+        <div className="centered-div">
           {/* <img
-            className="centered"
-            src={this.props.pictures[Math.floor(Math.random() * 5)].url}
-            // src='https://giphy.com/embed/qygzgFH2BXmhi'
-          /> */}
+              className="centered"
+              src={this.props.pictures[Math.floor(Math.random() * 5)].url}
+              // src='https://giphy.com/embed/qygzgFH2BXmhi'
+            /> */}
           <iframe
             className="centered"
             src={this.props.pictures[Math.floor(Math.random() * 25)].embed_url}
           />
-          <h4>{this.props.words.join(' ')}</h4>
-          <button type="submit" onClick={this.handleClick}>
+          <p className="centered-text">{this.props.words.join(' ')}</p>
+          <button type="submit" onClick={this.handleClick} name="again">
             Play again
           </button>
         </div>
       )
     } else {
       return (
-        <div className="centered">
+        <div className="center-div">
           <form className="centered" onSubmit={this.handleSubmit}>
             <label>
               <input
+                id="input"
                 onChange={this.handleChange}
                 type="text"
                 name="word"
                 value={this.props.transcript}
                 autoFocus="true"
+                backgroundColor={this.state.color}
               />
             </label>
             {/* <h3 className="centered-text"> __________________________ </h3> */}
             <h3 className="centered-text">{this.state.prompt}</h3>
-
-            <button className="centered-text" type="submit">
-              Submit
-            </button>
+            <iframe
+              src={
+                !this.props.words.length
+                  ? 'https://giphy.com/embed/l4pT1YVunxJ7g11O8'
+                  : this.props.words.length === 1
+                    ? 'https://giphy.com/embed/l378hhjDB5kjSs0qk'
+                    : 'https://giphy.com/embed/l378w6DoOV26903Sg'
+              }
+              width="480"
+              height="480"
+              frameBorder="0"
+              class="giphy-embed"
+              allowFullScreen
+            />
+            ) }}
+            {/* <button type="submit">Submit</button> */}
           </form>
         </div>
       )
@@ -119,13 +189,18 @@ const mapStateToProps = (state, ownProps) => ({
   words: state.words,
   pictures: state.pictures,
   prompts: state.prompts,
-  stop: ownProps.stop
+  stop: ownProps.stop,
+  colors: state.colors,
+  sticker: state.stickers
 })
 
 const mapDispatchToProps = dispatch => {
   return {
     addWordThunk: word => dispatch(addWordThunk(word)),
-    searchPicturesThunk: words => dispatch(searchPicturesThunk(words))
+    searchPicturesThunk: words => dispatch(searchPicturesThunk(words)),
+    clearWordsThunk: () => dispatch(clearWordsThunk()),
+    clearPicturesThunk: () => dispatch(clearPicturesThunk()),
+    getStickerThunk: () => dispatch(getStickerThunk())
   }
 }
 

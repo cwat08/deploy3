@@ -11,10 +11,11 @@ const App = props => {
   console.log('APP PROPS', props)
   return (
     <div>
-      <Routes
+      <Word
         transcript={props.transcript}
         reset={props.resetTranscript}
         stop={props.stopListening}
+        listening={props.listening}
       />
       {/* <Home
         transcript={props.transcript}

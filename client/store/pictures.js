@@ -5,6 +5,7 @@ import axios from 'axios'
  */
 const GET_PICTURES = 'GET PICTURES'
 const SEARCH_PICTURES = 'SEARCH_PICTURES'
+const CLEAR_PICTURES = 'CLEAR_PICTURES'
 
 /**
  * INITIAL STATE
@@ -16,6 +17,7 @@ const defaultPictures = []
  */
 //const getPictures = () => ({type: GET_PICTURES, pictures})
 const searchPictures = pictures => ({type: SEARCH_PICTURES, pictures})
+const clearPictures = () => ({type: CLEAR_PICTURES})
 
 /**
  * THUNK CREATORS
@@ -40,6 +42,14 @@ export const searchPicturesThunk = word => async dispatch => {
   }
 }
 
+export const clearPicturesThunk = () => async dispatch => {
+  try {
+    dispatch(clearPictures())
+  } catch (err) {
+    console.error(err.message)
+  }
+}
+
 /**
  * REDUCER
  */
@@ -47,6 +57,8 @@ export default function(state = defaultPictures, action) {
   switch (action.type) {
     case SEARCH_PICTURES:
       return action.pictures
+    case CLEAR_PICTURES:
+      return []
     default:
       return state
   }

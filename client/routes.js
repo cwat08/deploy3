@@ -22,8 +22,8 @@ class Routes extends Component {
         <Route exact path="/" component={Home} />
         <Route exact path="/play" component={Word} />
         {/* Routes placed here are available to all visitors */}
-        {/* <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} /> */}
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
         {/* Displays our Login component as a fallback */}
         <Route component={Home} />
       </Switch>

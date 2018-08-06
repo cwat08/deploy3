@@ -152,6 +152,7 @@ export default function SpeechRecognition(options) {
             transcript={transcript}
             recognition={recognition}
             browserSupportsSpeechRecognition={browserSupportsSpeechRecognition}
+            listening={this.state.listening}
             {...this.state}
             {...this.props}
           />
